@@ -1,0 +1,37 @@
+//Dijkstra works for n iterations and in each iteration (1) it chooses an unmarked node with least distance (2) make that node marked and do relaxations from this node.
+//At the end of this algorithm d -> stores the minimum distances from source s, and p - parent array
+const int N=2e5+10;
+const int inf=(1<<30);
+vector<pair<int,int>>adj[N];
+void dijkstra(int s,vector<int>&d,vector<int>&p,int n){
+    vector<bool>mark(n+1,false);
+    d.assign(n+1,inf);
+    p.assign(n+1,-1);
+    d[s]=0;
+    for(int i=0;i<n;i++){
+        int u=-1;
+        for(int i=1;i<=n;i++){
+            if(!mark[i] && (u==-1 || d[u]>d[i])
+                u=i;
+        }
+        if(d[u]==inf)break;
+        mark[u]=true;
+        for(auto [v,wt]:adj[u]){
+            if(d[v]>d[u]+wt){
+                d[v]=d[u]+wt;
+                p[v]=u;
+            }
+        }
+    }
+}
+//O(n^2+m)
+vector<int>path(int s,int t,vector<int> const&p){
+    vector<int>r;
+    for(int u=t;u!=s;u=p[u]){
+        r.push_back(u);
+    }
+    r.push_back(s);
+    reverse(r.begin(),r.end());
+    return r;
+}
+
